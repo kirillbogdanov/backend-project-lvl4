@@ -3,6 +3,6 @@
 
 import createApp from '../index.js';
 
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 createApp().listen(port, () => console.log(`Server running on port ${port}`));
