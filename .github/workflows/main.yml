@@ -28,8 +28,6 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.6.8
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "intense-sands-39715"
-          heroku_email: "kiralbogdanov@gmail.com"
-        env:
-          NODE_ENV: "production"
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
 
