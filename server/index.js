@@ -2,9 +2,13 @@ import express from 'express';
 import morgan from 'morgan';
 import Rollbar from 'rollbar';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 export default () => {
-  dotenv.config();
+  const configPath = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'config.env');
+  dotenv.config({ path: configPath });
+
   const app = express();
   const logger = morgan('dev');
 
@@ -17,7 +21,8 @@ export default () => {
   app.use(logger);
 
   app.use((req, res) => {
-    res.send('Hello!');
+    const env = process.env.NODE_ENV;
+    res.send(env);
   });
 
   app.use(rollbar.errorHandler());

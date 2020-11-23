@@ -8,7 +8,7 @@ test:
 	npm run test
 
 test-coverage:
-	npm run test --coverage
+	npm run test -- --coverage
 
 check:
 	make lint
