@@ -30,6 +30,8 @@ jobs:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "intense-sands-39715"
           heroku_email: "kiralbogdanov@gmail.com"
+          branch: "main"
+          dontuseforce: "true"
         env:
           NODE_ENV: "production"
 
