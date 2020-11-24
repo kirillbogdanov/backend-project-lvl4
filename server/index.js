@@ -15,8 +15,8 @@ export default () => {
   const app = express();
   const logger = morgan(isProduction ? 'common' : 'dev');
 
-  app.use('/assets', express.static('assets'));
-  app.set('views', './server/views');
+  app.use('/assets', express.static(path.join(dirname, '..', 'assets')));
+  app.set('views', path.join(dirname, 'views'));
   app.set('view engine', 'pug');
   app.use(logger);
 
