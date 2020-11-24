@@ -1,5 +1,7 @@
 .idea
 node_modules
 coverage
+dist
+assets/js
 **/.DS_Store
 **/*.env

@@ -14,5 +14,8 @@ check:
 	make lint
 	make test
 
-start:
+build-front:
+	npx webpack
+
+dev:
 	nodemon server/bin/server.js

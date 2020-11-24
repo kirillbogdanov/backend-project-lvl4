@@ -1,0 +1,18 @@
+doctype html
+html(lang="en")
+    head
+        script(src="/assets/js/main.js")
+        title Welcome
+    body
+        nav.navbar.navbar-expand-md.navbar-dark.bg-dark.mb-4
+            a.navbar-brand(href="#") App name
+            .collapse.navbar-collapse(id="navbarCollapse")
+                ul.navbar-nav.mr-auto
+                    li.nav-item.active
+                        a.nav-link(href="#") Home
+                    li.nav-item
+                        a.nav-link(href="#") Link
+                    li.nav-item
+                        a.nav-link(href="#") Link
+        main.container(role="main")
+            block content

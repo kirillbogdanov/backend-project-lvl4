@@ -6,26 +6,33 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 export default () => {
-  const configPath = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'config.env');
+  const dirname = path.dirname(fileURLToPath(import.meta.url));
+  const configPath = path.join(dirname, '..', 'config.env');
   dotenv.config({ path: configPath });
 
+  const nodeEnv = process.env.NODE_ENV;
+  const isProduction = nodeEnv === 'production';
   const app = express();
-  const logger = morgan('dev');
+  const logger = morgan(isProduction ? 'common' : 'dev');
 
-  const rollbar = new Rollbar({
-    accessToken: 'aa024f433fcf400f9124eff4c85775f7',
-    captureUncaught: true,
-    captureUnhandledRejections: true,
-  });
-
+  app.use('/assets', express.static('assets'));
+  app.set('views', './server/views');
+  app.set('view engine', 'pug');
   app.use(logger);
 
-  app.use((req, res) => {
-    const env = process.env.NODE_ENV;
-    res.send(env);
+  app.get('/', (req, res) => {
+    res.render('index');
   });
 
-  app.use(rollbar.errorHandler());
+  if (isProduction) {
+    const rollbar = new Rollbar({
+      accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
+      captureUncaught: true,
+      captureUnhandledRejections: true,
+    });
+
+    app.use(rollbar.errorHandler());
+  }
 
   return app;
 };
