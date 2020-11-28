@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "npx -n --experimental-vm-modules -n --no-warnings jest --passWithNoTests",
-    "preinstall": "make install-deps && make build-front"
+    "postinstall": "make build-front"
   },
   "repository": {
     "type": "git",
