@@ -4,4 +4,4 @@ const controllers = [
   welcome,
 ];
 
-export default (app) => controllers.forEach((controller) => controller(app));
+export default (app) => controllers.forEach((controller) => app.register(controller));

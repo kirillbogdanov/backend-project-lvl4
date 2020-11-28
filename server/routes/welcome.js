@@ -1,3 +1,7 @@
-export default (app) => {
-  app.view('index');
+export default (app, options, done) => {
+  app.get('/', (req, res) => {
+    res.view('welcome');
+  });
+
+  done();
 };
