@@ -1,4 +1,3 @@
-import request from 'supertest';
 import createApp from '../server/index.js';
 
 describe('requests', () => {
@@ -9,12 +8,15 @@ describe('requests', () => {
   });
 
   test('start test', async () => {
-    const res = await request(app).get('/');
+    const res = await app.inject({
+      method: 'GET',
+      url: '/',
+    });
 
-    expect(res.status).toBe(200);
+    expect(res.statusCode).toBe(200);
   });
 
   afterAll(() => {
-    app.stop();
+    app.close();
   });
 });

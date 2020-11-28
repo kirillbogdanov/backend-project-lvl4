@@ -1,8 +1,13 @@
 #! /usr/bin/env node
-/* eslint-disable no-console */
 
 import createApp from '../index.js';
 
 const port = process.env.PORT || 8080;
+const app = createApp();
 
-createApp().listen(port, () => console.log(`Server running on port ${port}`));
+app.listen(port, (err) => {
+  if (err) {
+    app.log.error(err);
+    process.exit(1);
+  }
+});
