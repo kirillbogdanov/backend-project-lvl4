@@ -6,15 +6,25 @@ import { fileURLToPath } from 'url';
 import pug from 'pug';
 import pointOfView from 'point-of-view';
 import fastifyStatic from 'fastify-static';
+import i18next from 'i18next';
 
+import ru from './locales/ru.js';
+import en from './locales/en.js';
+import getHelpers from './helpers/index.js';
 import addRoutes from './routes/index.js';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const registerPlugins = (app) => {
+  const helpers = getHelpers();
   app.register(pointOfView, {
     engine: {
       pug,
+    },
+    defaultContext: {
+      ...helpers,
+      assetPath: (filename) => `/assets/${filename}`,
     },
     includeViewExtension: true,
     root: path.join(dirname, 'views'),
@@ -25,15 +35,18 @@ const registerPlugins = (app) => {
   });
 };
 
+const setUpLocalization = () => {
+  i18next.init({
+    lng: 'ru',
+    fallbackLng: 'en',
+    debug: isDevelopment,
+    resources: { ru, en },
+  });
+};
+
 export default () => {
-  // const rollbar = new Rollbar({
-  //   accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
-  //   captureUncaught: true,
-  //   captureUnhandledRejections: true,
-  // });
   const configPath = path.join(dirname, '..', 'config.env');
   dotenv.config({ path: configPath });
-  const isDevelopment = process.env.NODE_ENV !== 'production';
 
   const app = fastify({
     logger: {
@@ -42,6 +55,7 @@ export default () => {
     ignoreTrailingSlash: true,
   });
 
+  setUpLocalization();
   registerPlugins(app);
   addRoutes(app);
 

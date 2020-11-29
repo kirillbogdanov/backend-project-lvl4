@@ -34,9 +34,9 @@
     "dotenv": "^8.2.0",
     "fastify": "^3.8.0",
     "fastify-static": "^3.3.0",
+    "i18next": "^19.8.4",
     "pino-pretty": "^4.3.0",
     "point-of-view": "^4.6.0",
-    "pug": "^3.0.0",
-    "rollbar": "^2.19.4"
+    "pug": "^3.0.0"
   }
 }

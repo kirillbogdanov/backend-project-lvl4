@@ -1,18 +1,17 @@
 doctype html
 html(lang="en")
     head
-        script(src="/assets/js/main.js")
+        script(src=assetPath('js/main.js'))
         title Welcome
     body
         nav.navbar.navbar-expand-md.navbar-dark.bg-dark.mb-4
-            a.navbar-brand(href="#") App name
+            a.navbar-brand(href="#")= t('appName')
             .collapse.navbar-collapse(id="navbarCollapse")
                 ul.navbar-nav.mr-auto
-                    li.nav-item.active
-                        a.nav-link(href="#") Home
                     li.nav-item
-                        a.nav-link(href="#") Link
-                    li.nav-item
-                        a.nav-link(href="#") Link
+                        a.nav-link(href="#")= t('nav.users')
+            div
+                a.btn.btn-primary.btn-sm.ml-2(href="#")= t('nav.signup')
+                a.btn.btn-outline-primary.btn-sm.ml-2(href="#")= t('nav.signin')
         main.container(role="main")
             block content
