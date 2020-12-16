@@ -1,5 +1,6 @@
 const path = require('path');
 const dotenv = require('dotenv');
+const { parse } = require('pg-connection-string');
 
 const configPath = path.join(__dirname, 'config.env');
 dotenv.config({ path: configPath });
@@ -34,7 +35,10 @@ module.exports = {
   production: {
     client: 'pg',
     useNullAsDefault: true,
-    connection: process.env.DATABASE_URL,
+    connection: {
+      ssl: true,
+      ...parse(process.env.DATABASE_URL || ''),
+    },
     migrations,
   },
 };

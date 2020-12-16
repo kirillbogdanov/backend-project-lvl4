@@ -50,6 +50,7 @@
     "objection": "^2.2.3",
     "objection-unique": "^1.2.1",
     "pg": "^8.5.1",
+    "pg-connection-string": "^2.4.0",
     "pino-pretty": "^4.3.0",
     "point-of-view": "^4.6.0",
     "pug": "^3.0.0",
