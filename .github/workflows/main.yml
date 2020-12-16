@@ -16,8 +16,6 @@ jobs:
           node-version: 14.3
       - name: Install dependencies
         run: make install-deps
-      - name: Run database migrations
-        run: NODE_ENV=test make migrate
       - name: Run linter
         run: make lint
       - name: Capture test coverage and send to CodeClimate

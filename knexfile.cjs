@@ -8,8 +8,17 @@ const migrations = {
   directory: path.resolve('server', 'migrations'),
 };
 
+const sqliteConfig = {
+  client: 'sqlite3',
+  useNullAsDefault: true,
+  connection: {
+    filename: './db.sqlite',
+  },
+  migrations,
+};
+
 module.exports = {
-  development: {
+  local: {
     client: 'pg',
     useNullAsDefault: true,
     connection: {
@@ -20,14 +29,8 @@ module.exports = {
     },
     migrations,
   },
-  test: {
-    client: 'sqlite3',
-    useNullAsDefault: true,
-    connection: {
-      filename: './db.sqlite',
-    },
-    migrations,
-  },
+  development: sqliteConfig,
+  test: sqliteConfig,
   production: {
     client: 'pg',
     useNullAsDefault: true,
