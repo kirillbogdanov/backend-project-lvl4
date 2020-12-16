@@ -1,0 +1,21 @@
+extends ../layouts/application.pug
+
+block content
+    table.table
+        thead
+            tr
+                th= t('views.users.id')
+                th= t('views.users.email')
+                th= t('views.users.firstName')
+                th= t('views.users.lastName')
+                th
+        tbody
+        each user in users
+            tr
+                td= user.id
+                td
+                    a(href=`/users/${user.id}/edit`)= user.email
+                td= user.firstName
+                td= user.lastName
+                td
+                    +buttonTo(`/users/${user.id}`, 'DELETE', t('views.users.index.delete'))(class="btn btn-sm btn-danger")

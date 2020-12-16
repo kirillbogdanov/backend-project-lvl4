@@ -1,0 +1,9 @@
+extends ../layouts/application.pug
+
+block content
+    .m-auto.w-50
+        h1.h3.mb-3.font-weight-normal.text-center= t('views.session.title')
+        form(method='POST' action='/session')
+            +input(user, 'email', [], t('views.users.email'))(type="email" required autofocus)
+            +input(user, 'password', [], t('views.users.password'))(type="password" required)
+            +submit(t('views.session.submit'))

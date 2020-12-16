@@ -1,6 +1,6 @@
 export default (app, options, done) => {
   app.get('/', (req, res) => {
-    res.view('welcome');
+    res.render('welcome');
   });
 
   done();

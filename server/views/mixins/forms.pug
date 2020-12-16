@@ -1,0 +1,22 @@
+- const getInputName = (property) => `data[${property}]`
+
+mixin submit(value)
+    button.btn.btn-lg.btn-primary.btn-block.my-3(type="submit")= value
+
+mixin buttonTo(action, method, value)
+    form(action=action method="POST")
+        input(type="hidden" name="_method" value=method)
+        button(type='submit')&attributes(attributes)= value
+
+mixin input(entity, propertyName, errors = [], label)
+  - errors = Array(_.get(errors, propertyName, [])).flat()
+  - classLine = 'form-control' + (_.isEmpty(errors) ? '' : ' is-invalid')
+    .form-group(class=(errors[propertyName] && 'has-danger'))
+        label= label
+        input(
+            name=getInputName(propertyName)
+            class=classLine
+            value=_.get(entity, propertyName, '')
+        )&attributes(attributes)
+        if !_.isEmpty(errors)
+            .invalid-feedback= errors.map(({ message }) => message).join('. ')

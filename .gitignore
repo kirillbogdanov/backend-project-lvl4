@@ -5,3 +5,4 @@ dist
 assets/js
 **/.DS_Store
 **/*.env
+*.sqlite

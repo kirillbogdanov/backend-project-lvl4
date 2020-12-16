@@ -1,0 +1,12 @@
+extends ../layouts/application.pug
+
+block content
+    .m-auto.w-50
+        h1.h3.mb-3.font-weight-normal.text-center= t('views.users.edit.title')
+        form(method='POST' action=`/users/${user.id}`)
+            input(type="hidden" name="_method" value="PATCH")
+            +input(user, 'email', errors, t('views.users.email'))(type="email" required)
+            +input(user, 'password', errors, t('views.users.password'))(type="password" required)
+            +input(user, 'firstName', errors, t('views.users.firstName'))(type="text" required)
+            +input(user, 'lastName', errors, t('views.users.lastName'))(type="text" required)
+            +submit(t('views.users.edit.submit'))

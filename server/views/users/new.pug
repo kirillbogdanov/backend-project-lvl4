@@ -1,0 +1,11 @@
+extends ../layouts/application.pug
+
+block content
+    .m-auto.w-50
+        h1.h3.mb-3.font-weight-normal.text-center= t('views.users.new.title')
+        form(method='POST' action='/users')
+            +input(user, 'email', errors, t('views.users.email'))(type="email" required autofocus)
+            +input(user, 'password', errors, t('views.users.password'))(type="password" required)
+            +input(user, 'firstName', errors, t('views.users.firstName'))(type="text" required)
+            +input(user, 'lastName', errors, t('views.users.lastName'))(type="text" required)
+            +submit(t('views.users.new.submit'))

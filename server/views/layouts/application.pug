@@ -1,17 +1,27 @@
+include ../mixins/forms.pug
+
 doctype html
-html(lang="en")
+html.h-100(lang="en")
     head
         script(src=assetPath('js/main.js'))
         title Welcome
-    body
+    body.h-100
         nav.navbar.navbar-expand-md.navbar-dark.bg-dark.mb-4
-            a.navbar-brand(href="#")= t('appName')
+            a.navbar-brand(href="/")= t('appName')
             .collapse.navbar-collapse(id="navbarCollapse")
                 ul.navbar-nav.mr-auto
                     li.nav-item
-                        a.nav-link(href="#")= t('nav.users')
+                        a.nav-link(href="/users")= t('layouts.application.users')
             div
-                a.btn.btn-primary.btn-sm.ml-2(href="#")= t('nav.signup')
-                a.btn.btn-outline-primary.btn-sm.ml-2(href="#")= t('nav.signin')
-        main.container(role="main")
+                if isAuthenticated()
+                    +buttonTo('/session', 'DELETE', t('layouts.application.logout'))(class="btn btn-sm btn-secondary")
+                else
+                    a.btn.btn-primary.btn-sm.ml-2(href="/users/new")= t('layouts.application.signup')
+                    a.btn.btn-outline-primary.btn-sm.ml-2(href="/session/new")= t('layouts.application.signin')
+        main.container.h-100(role="main")
+
+            each messages, type in res.flash() || []
+                each message in messages
+                    .alert(class=`alert-${getAlertClass(type)}`)= message
+
             block content

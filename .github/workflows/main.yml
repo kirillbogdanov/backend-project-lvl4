@@ -16,6 +16,8 @@ jobs:
           node-version: 14.3
       - name: Install dependencies
         run: make install-deps
+      - name: Run database migrations
+        run: NODE_ENV=test make migrate
       - name: Run linter
         run: make lint
       - name: Capture test coverage and send to CodeClimate
@@ -24,10 +26,10 @@ jobs:
           coverageCommand: make test-coverage
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-      - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.6.8
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+#      - name: Deploy to Heroku
+#        uses: akhileshns/heroku-deploy@v3.6.8
+#        with:
+#          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+#          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+#          heroku_email: ${{ secrets.HEROKU_EMAIL }}
 

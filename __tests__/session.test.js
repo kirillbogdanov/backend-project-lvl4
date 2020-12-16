@@ -1,4 +1,7 @@
-import createApp from '../server/index.js';
+import {
+  afterAll, beforeAll, describe, test,
+} from '@jest/globals';
+import createApp from '../server';
 
 describe('requests', () => {
   let app;
@@ -7,10 +10,10 @@ describe('requests', () => {
     app = createApp();
   });
 
-  test('start test', async () => {
+  test('GET /session/new', async () => {
     const res = await app.inject({
       method: 'GET',
-      url: '/',
+      url: '/session/new',
     });
 
     expect(res.statusCode).toBe(200);
