@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "npx -n --experimental-vm-modules -n --no-warnings jest --config jest.config.js --silent",
-    "postinstall": "make build-front"
+    "postinstall": "make build-front && make migrate"
   },
   "repository": {
     "type": "git",

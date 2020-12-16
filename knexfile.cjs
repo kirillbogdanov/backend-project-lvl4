@@ -8,18 +8,16 @@ const migrations = {
   directory: path.resolve('server', 'migrations'),
 };
 
-const connection = {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-};
-
 module.exports = {
   development: {
     client: 'pg',
     useNullAsDefault: true,
-    connection,
+    connection: {
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+    },
     migrations,
   },
   test: {
@@ -33,7 +31,7 @@ module.exports = {
   production: {
     client: 'pg',
     useNullAsDefault: true,
-    connection,
+    connection: process.env.DATABASE_URL,
     migrations,
   },
 };
