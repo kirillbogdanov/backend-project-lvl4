@@ -18,6 +18,8 @@ jobs:
         run: make install-deps
       - name: Run linter
         run: make lint
+      - name: ????
+        run: echo $SESSION_SECRET
       - name: Capture test coverage and send to CodeClimate
         uses: paambaati/codeclimate-action@v2.6.0
         with:
