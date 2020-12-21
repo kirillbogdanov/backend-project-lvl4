@@ -1,6 +1,7 @@
 import faker from 'faker';
 import qs from 'qs';
 import _ from 'lodash';
+import setCookie from 'set-cookie-parser';
 
 export const fakeUserData = () => ({
   email: faker.internet.email(),
@@ -9,18 +10,9 @@ export const fakeUserData = () => ({
   lastName: faker.name.lastName(),
 });
 
-export const postUser = (app, propsObj) => app.inject({
+export const postEntity = (app, prefix, propsObj, session) => app.inject({
   method: 'POST',
-  url: '/users',
-  headers: {
-    'content-type': 'application/x-www-form-urlencoded',
-  },
-  body: qs.stringify({ data: propsObj }),
-});
-
-export const patchUser = (app, id, propsObj, session) => app.inject({
-  method: 'PATCH',
-  url: `/users/${id}`,
+  url: prefix,
   headers: {
     'content-type': 'application/x-www-form-urlencoded',
   },
@@ -30,29 +22,56 @@ export const patchUser = (app, id, propsObj, session) => app.inject({
   body: qs.stringify({ data: propsObj }),
 });
 
-export const getUser = (app, id, session) => app.inject({
+export const patchEntity = (app, prefix, id, propsObj, session) => app.inject({
+  method: 'PATCH',
+  url: `${prefix}/${id}`,
+  headers: {
+    'content-type': 'application/x-www-form-urlencoded',
+  },
+  cookies: {
+    session,
+  },
+  body: qs.stringify({ data: propsObj }),
+});
+
+export const getEntity = (app, prefix, id, session) => app.inject({
   method: 'GET',
   cookies: {
     session,
   },
-  url: `/users/${id}/edit`,
+  url: `${prefix}/${id}/edit`,
 });
 
-export const deleteUser = (app, id, session) => app.inject({
+export const deleteEntity = (app, prefix, id, session) => app.inject({
   method: 'DELETE',
   cookies: {
     session,
   },
-  url: `/users/${id}`,
+  url: `${prefix}/${id}`,
 });
 
-export const postSession = (app, propsObj) => app.inject({
-  method: 'POST',
-  url: '/session',
-  headers: {
-    'content-type': 'application/x-www-form-urlencoded',
+export const getEntitiesList = (app, prefix, session) => app.inject({
+  method: 'GET',
+  cookies: {
+    session,
   },
-  body: qs.stringify({ data: propsObj }),
+  url: `${prefix}`,
 });
+
+export const getEntityCreationPage = (app, prefix, session) => app.inject({
+  method: 'GET',
+  cookies: {
+    session,
+  },
+  url: `${prefix}/new`,
+});
+
+export const authenticateAsNewUser = async (app) => {
+  const userData = fakeUserData();
+  await postEntity(app, '/users', userData);
+  const signinRes = await postEntity(app, '/session', _.pick(userData, ['email', 'password']));
+
+  return setCookie.parseString(signinRes.headers['set-cookie']).value;
+};
 
 export const omitPassword = (userData) => _.omit(userData, ['password']);

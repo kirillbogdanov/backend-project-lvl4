@@ -6,8 +6,8 @@ block content
             tr
                 th= t('views.users.id')
                 th= t('views.users.email')
-                th= t('views.users.firstName')
-                th= t('views.users.lastName')
+                th= t('views.users.fullName')
+                th= t('views.users.createdAt')
                 th
         tbody
         each user in users
@@ -15,7 +15,7 @@ block content
                 td= user.id
                 td
                     a(href=`/users/${user.id}/edit`)= user.email
-                td= user.firstName
-                td= user.lastName
+                td= `${user.firstName} ${user.lastName}`
+                td= formatDate(user.createdAt)
                 td
                     +buttonTo(`/users/${user.id}`, 'DELETE', t('views.users.index.delete'))(class="btn btn-sm btn-danger")

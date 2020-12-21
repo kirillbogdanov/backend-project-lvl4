@@ -4,6 +4,7 @@ export default {
     layouts: {
       application: {
         users: 'Users',
+        statuses: 'Statuses',
         signin: 'Sign in',
         signup: 'Sign up',
         logout: 'Log out',
@@ -27,6 +28,9 @@ export default {
           error: 'Wrong email or password',
         },
       },
+      common: {
+        unauthenticated: 'Need to authenticate',
+      },
     },
     views: {
       users: {
@@ -44,8 +48,23 @@ export default {
         id: 'id',
         email: 'Email',
         password: 'Password',
+        fullName: 'Full name',
         firstName: 'First name',
         lastName: 'Last name',
+        createdAt: 'Creation date',
+      },
+      statuses: {
+        index: {
+          delete: 'Delete',
+          create: 'Create status',
+        },
+        new: {
+          title: 'New status',
+          submit: 'Create',
+        },
+        id: 'id',
+        name: 'Name',
+        createdAt: 'Creation date',
       },
       session: {
         title: 'Sign in',

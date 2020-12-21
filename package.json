@@ -5,8 +5,19 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "npx -n --experimental-vm-modules -n --no-warnings jest --config jest.config.js --silent",
-    "postinstall": "make build-front && make migrate"
+    "start": "node server/bin/server.js",
+    "postinstall": "npm run build && npm run migrate",
+    "build": "npm run build:frontend",
+    "build:frontend": "webpack",
+    "migrate": "knex --knexfile=./knexfile.cjs migrate:latest",
+    "migrate:make": "knex --knexfile=./knexfile.cjs migrate:make",
+    "migrate:rollback": "knex --knexfile=./knexfile.cjs migrate:rollback",
+    "dev": "npm run watch:node",
+    "watch:node": "nodemon server/bin/server.js",
+    "check": "npm run lint && npm run test",
+    "test": "npm run migrate -- --env test && npx -n --experimental-vm-modules -n --no-warnings jest --config jest.config.js --silent",
+    "test:coverage": "npm run test -- --coverage",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",

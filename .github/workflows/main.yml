@@ -15,13 +15,13 @@ jobs:
         with:
           node-version: 14.3
       - name: Install dependencies
-        run: make install-deps
+        run: npm install
       - name: Run linter
-        run: make lint
+        run: npm run lint
       - name: Capture test coverage and send to CodeClimate
         uses: paambaati/codeclimate-action@v2.6.0
         with:
-          coverageCommand: make test-coverage
+          coverageCommand: npm run test:coverage
         env:
           SESSION_SALT: ${{ secrets.SESSION_SALT }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}

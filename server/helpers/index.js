@@ -17,5 +17,9 @@ export default () => ({
         throw new Error(`Unknown flash type: '${type}'`);
     }
   },
+  formatDate(str) {
+    const date = new Date(str);
+    return date.toLocaleString();
+  },
   _,
 });

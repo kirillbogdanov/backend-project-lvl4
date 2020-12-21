@@ -27,6 +27,16 @@ const mode = process.env.NODE_ENV || 'development';
 const isDevelopment = mode !== 'production';
 
 const registerPlugins = (app) => {
+  const restrictForUnauthorized = (req, res, done) => {
+    if (!req.isAuthenticated()) {
+      req.flash('error', app.t('flash.common.unauthenticated'));
+      res.redirect('/session/new');
+    }
+
+    done();
+  };
+  app.decorate('restrictForUnauthorized', restrictForUnauthorized);
+
   app.register(fastifyObjectionjs, {
     knexConfig: knexConfig[mode],
     models,

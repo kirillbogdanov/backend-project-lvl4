@@ -1,0 +1,20 @@
+extends ../layouts/application.pug
+
+block content
+    a.btn.btn-primary.mb-2.w-100(href="/statuses/new")= t('views.statuses.index.create')
+    table.table
+        thead
+            tr
+                th= t('views.statuses.id')
+                th= t('views.statuses.name')
+                th= t('views.statuses.createdAt')
+                th
+        tbody
+        each status in statuses
+            tr
+              td= status.id
+              td
+                  a(href=`/statuses/${status.id}/edit`)= status.name
+              td= formatDate(status.createdAt)
+              td
+                  +buttonTo(`/statuses/${status.id}`, 'DELETE', t('views.statuses.index.delete'))(class="btn btn-sm btn-danger")

@@ -4,6 +4,7 @@ export default {
     layouts: {
       application: {
         users: 'Пользователи',
+        statuses: 'Статусы',
         signin: 'Войти',
         signup: 'Зарегистрироваться',
         logout: 'Выйти',
@@ -21,11 +22,24 @@ export default {
         },
         unauthenticated: 'Только пользователь может изменять свои данные',
       },
+      statuses: {
+        create: {
+          success: 'Статус успешно создан',
+          error: 'Не удалось создать статус',
+        },
+        edit: {
+          success: 'Статус успешно изменен',
+          error: 'Не удалось изменить статус',
+        },
+      },
       session: {
         new: {
           success: 'Аутентификация прошла успешно',
           error: 'Неверная электронная почта или пароль',
         },
+      },
+      common: {
+        unauthenticated: 'Необходимо аутентифицироваться',
       },
     },
     views: {
@@ -44,8 +58,27 @@ export default {
         id: 'id',
         email: 'Электронная почта',
         password: 'Пароль',
+        fullName: 'Полное имя',
         firstName: 'Имя',
         lastName: 'Фамилия',
+        createdAt: 'Дата создания',
+      },
+      statuses: {
+        index: {
+          delete: 'Удалить',
+          create: 'Создать статус',
+        },
+        new: {
+          title: 'Новый статус',
+          submit: 'Создать',
+        },
+        edit: {
+          title: 'Редактирование статуса',
+          submit: 'Сохранить',
+        },
+        id: 'id',
+        name: 'Название',
+        createdAt: 'Дата создания',
       },
       session: {
         title: 'Вход',

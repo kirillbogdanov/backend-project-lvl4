@@ -1,0 +1,9 @@
+extends ../layouts/application.pug
+
+block content
+    .m-auto.w-50
+        h1.h3.mb-3.font-weight-normal.text-center= t('views.statuses.edit.title')
+        form(method='POST' action=`/statuses/${status.id}`)
+            input(type="hidden" name="_method" value="PATCH")
+            +input(status, 'name', errors, t('views.statuses.name'))(type="text" required)
+            +submit(t('views.statuses.edit.submit'))

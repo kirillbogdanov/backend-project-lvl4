@@ -2,25 +2,20 @@ import { Model } from 'objection';
 import objectionUnique from 'objection-unique';
 import _ from 'lodash';
 
-import encrypt from '../lib/secure.js';
+const unique = objectionUnique({ fields: ['name'] });
 
-const unique = objectionUnique({ fields: ['email'] });
-
-export default class User extends unique(Model) {
+export default class Status extends unique(Model) {
   static get tableName() {
-    return 'users';
+    return 'statuses';
   }
 
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['email', 'password', 'firstName', 'lastName'],
+      required: ['name'],
       properties: {
         id: { type: 'integer' },
-        email: { type: 'string', format: 'email' },
-        password: { type: 'string', minLength: 3 },
-        firstName: { type: 'string' },
-        lastName: { type: 'string' },
+        name: { type: 'string' },
         createdAt: { type: 'string' },
         updatedAt: { type: 'string' },
       },
@@ -33,13 +28,5 @@ export default class User extends unique(Model) {
       .filter((propName) => propName !== 'id');
 
     return _.pick(obj, propNames);
-  }
-
-  set password(value) {
-    this.passwordDigest = encrypt(value);
-  }
-
-  isCorrectPassword(password) {
-    return encrypt(password) === this.passwordDigest;
   }
 }

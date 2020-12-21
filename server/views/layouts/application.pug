@@ -12,6 +12,9 @@ html.h-100(lang="en")
                 ul.navbar-nav.mr-auto
                     li.nav-item
                         a.nav-link(href="/users")= t('layouts.application.users')
+                    if isAuthenticated()
+                        li.nav-item
+                            a.nav-link(href="/statuses")= t('layouts.application.statuses')
             div
                 if isAuthenticated()
                     +buttonTo('/session', 'DELETE', t('layouts.application.logout'))(class="btn btn-sm btn-secondary")

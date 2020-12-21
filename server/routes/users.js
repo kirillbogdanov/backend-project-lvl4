@@ -5,7 +5,7 @@ export default (app, options, done) => {
     .get('/users', async (req, res) => {
       try {
         const users = await app.objection.models.user.query()
-          .select('id', 'email', 'firstName', 'LastName');
+          .select('id', 'email', 'firstName', 'LastName', 'createdAt');
 
         res.render('users/index', { users });
         return res;
