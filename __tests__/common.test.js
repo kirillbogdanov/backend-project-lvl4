@@ -1,34 +1,32 @@
 import {
-  afterAll, beforeAll, describe, test,
+  afterAll, beforeAll, test,
 } from '@jest/globals';
 import createApp from '../server';
 
-describe('requests', () => {
-  let app;
+let app;
 
-  beforeAll(() => {
-    app = createApp();
+beforeAll(() => {
+  app = createApp();
+});
+
+afterAll(() => {
+  app.close();
+});
+
+test('GET /', async () => {
+  const res = await app.inject({
+    method: 'GET',
+    url: '/',
   });
 
-  test('GET /', async () => {
-    const res = await app.inject({
-      method: 'GET',
-      url: '/',
-    });
+  expect(res.statusCode).toBe(200);
+});
 
-    expect(res.statusCode).toBe(200);
+test('GET /wrong-path', async () => {
+  const res = await app.inject({
+    method: 'GET',
+    url: '/wrong-path',
   });
 
-  test('GET /wrong-path', async () => {
-    const res = await app.inject({
-      method: 'GET',
-      url: '/wrong-path',
-    });
-
-    expect(res.statusCode).toBe(404);
-  });
-
-  afterAll(() => {
-    app.close();
-  });
+  expect(res.statusCode).toBe(404);
 });

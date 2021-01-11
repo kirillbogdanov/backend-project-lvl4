@@ -5,6 +5,7 @@ export default {
       application: {
         users: 'Пользователи',
         statuses: 'Статусы',
+        tasks: 'Задачи',
         signin: 'Войти',
         signup: 'Зарегистрироваться',
         logout: 'Выйти',
@@ -20,6 +21,10 @@ export default {
           success: 'Данные пользователя изменены',
           error: 'Не удалось изменить данные пользователя',
         },
+        delete: {
+          success: 'Пользователь успешно удален',
+          error: 'Не удалось удалить пользователя',
+        },
         unauthenticated: 'Только пользователь может изменять свои данные',
       },
       statuses: {
@@ -30,6 +35,20 @@ export default {
         edit: {
           success: 'Статус успешно изменен',
           error: 'Не удалось изменить статус',
+        },
+      },
+      tasks: {
+        create: {
+          success: 'Задача успешно создана',
+          error: 'Не удалось создать задачу',
+        },
+        edit: {
+          success: 'Задача успешно изменена',
+          error: 'Не удалось изменить задачу',
+        },
+        delete: {
+          success: 'Задача успешно удалена',
+          unauthorized: 'Задачу может удалить только ее создатель',
         },
       },
       session: {
@@ -55,7 +74,7 @@ export default {
           title: 'Редактирование пользователя',
           submit: 'Сохранить',
         },
-        id: 'id',
+        id: 'ID',
         email: 'Электронная почта',
         password: 'Пароль',
         fullName: 'Полное имя',
@@ -76,8 +95,34 @@ export default {
           title: 'Редактирование статуса',
           submit: 'Сохранить',
         },
-        id: 'id',
+        id: 'ID',
         name: 'Название',
+        createdAt: 'Дата создания',
+      },
+      tasks: {
+        index: {
+          create: 'Создать задачу',
+          delete: 'Удалить',
+          edit: 'Изменить',
+        },
+        new: {
+          title: 'Новая задача',
+          submit: 'Создать',
+        },
+        edit: {
+          title: 'Изменение задачи',
+          submit: 'Сохранить',
+        },
+        card: {
+          edit: 'Изменить',
+          delete: 'Удалить',
+        },
+        id: 'ID',
+        name: 'Название',
+        description: 'Описание',
+        status: 'Статус',
+        creator: 'Автор',
+        executor: 'Исполнитель',
         createdAt: 'Дата создания',
       },
       session: {

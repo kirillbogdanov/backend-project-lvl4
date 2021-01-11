@@ -15,7 +15,7 @@
     "dev": "npm run watch:node",
     "watch:node": "nodemon server/bin/server.js",
     "check": "npm run lint && npm run test",
-    "test": "npm run migrate -- --env test && npx -n --experimental-vm-modules -n --no-warnings jest --config jest.config.js --silent",
+    "test": "npm run migrate -- --env test && npx -n --experimental-vm-modules -n --no-warnings jest -i --config jest.config.js",
     "test:coverage": "npm run test -- --coverage",
     "lint": "eslint ."
   },

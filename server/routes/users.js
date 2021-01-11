@@ -5,7 +5,7 @@ export default (app, options, done) => {
     .get('/users', async (req, res) => {
       try {
         const users = await app.objection.models.user.query()
-          .select('id', 'email', 'firstName', 'LastName', 'createdAt');
+          .select('id', 'email', 'firstName', 'lastName', 'createdAt');
 
         res.render('users/index', { users });
         return res;
@@ -76,14 +76,20 @@ export default (app, options, done) => {
       try {
         const user = await app.objection.models.user.query().findById(id);
 
+        const userTasks = await app.objection.models.task.query().where('creatorId', id).orWhere('executorId', id);
+        if (userTasks.length > 0) {
+          throw new Error();
+        }
+
         await req.logOut();
         await user.$query().delete();
-        res.redirect('/users');
-
-        return res;
+        req.flash('info', app.t('flash.users.delete.success'));
       } catch (e) {
-        return e.error;
+        req.flash('error', app.t('flash.users.delete.error'));
       }
+      res.redirect('/users');
+
+      return res;
     })
     .get('/users/:id/edit', async (req, res) => {
       const { id } = req.params;

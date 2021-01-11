@@ -9,8 +9,8 @@ mixin buttonTo(action, method, value)
         button(type='submit')&attributes(attributes)= value
 
 mixin input(entity, propertyName, errors = [], label)
-  - errors = Array(_.get(errors, propertyName, [])).flat()
-  - classLine = 'form-control' + (_.isEmpty(errors) ? '' : ' is-invalid')
+    - errors = Array(_.get(errors, propertyName, [])).flat()
+    - classLine = 'form-control' + (_.isEmpty(errors) ? '' : ' is-invalid')
     .form-group(class=(errors[propertyName] && 'has-danger'))
         label= label
         input(
@@ -18,5 +18,32 @@ mixin input(entity, propertyName, errors = [], label)
             class=classLine
             value=_.get(entity, propertyName, '')
         )&attributes(attributes)
+        if !_.isEmpty(errors)
+            .invalid-feedback= errors.map(({ message }) => message).join('. ')
+
+mixin textarea(entity, propertyName, errors = [], label)
+    - errors = Array(_.get(errors, propertyName, [])).flat()
+    - classLine = 'form-control' + (_.isEmpty(errors) ? '' : ' is-invalid')
+    .form-group(class=(errors[propertyName] && 'has-danger'))
+        label= label
+        textarea(
+            name=getInputName(propertyName)
+            class=classLine
+        )&attributes(attributes)= _.get(entity, propertyName, '')
+        if !_.isEmpty(errors)
+            .invalid-feedback= errors.map(({ message }) => message).join('. ')
+
+mixin select(entity, propertyName, options, errors = [], label)
+    - errors = Array(_.get(errors, propertyName, [])).flat()
+    - classLine = 'form-control' + (_.isEmpty(errors) ? '' : ' is-invalid')
+    .form-group(class=(errors[propertyName] && 'has-danger'))
+        label= label
+        select(
+            name=getInputName(propertyName)
+            class=classLine
+        )&attributes(attributes)
+            option
+            each opt in options
+                option(value=opt.value selected=(opt.value === _.get(entity, propertyName, '')))= opt.label
         if !_.isEmpty(errors)
             .invalid-feedback= errors.map(({ message }) => message).join('. ')

@@ -1,0 +1,27 @@
+extends ../layouts/application.pug
+
+block content
+    a.btn.btn-primary.mb-2.w-100(href="/tasks/new")= t('views.tasks.index.create')
+    table.table
+        thead
+            tr
+                th= t('views.tasks.id')
+                th= t('views.tasks.name')
+                th= t('views.tasks.status')
+                th= t('views.tasks.creator')
+                th= t('views.tasks.executor')
+                th= t('views.tasks.createdAt')
+                th
+        tbody
+        each task in tasks
+            tr
+                td= task.id
+                td
+                    a(href=`/tasks/${task.id}`)= task.name
+                td= task.status.name
+                td= task.creator.fullName
+                td= task.executor ? task.executor.fullName : ''
+                td= formatDate(task.createdAt)
+                td
+                    a.btn.btn-sm.btn-primary.mb-1(href=`/tasks/${task.id}/edit`)= t('views.tasks.index.edit')
+                    +buttonTo(`/tasks/${task.id}`, 'DELETE', t('views.tasks.index.delete'))(class="btn btn-sm btn-danger")

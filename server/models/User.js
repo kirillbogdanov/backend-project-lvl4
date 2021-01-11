@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { Model } from 'objection';
 import objectionUnique from 'objection-unique';
 import _ from 'lodash';
@@ -37,6 +38,10 @@ export default class User extends unique(Model) {
 
   set password(value) {
     this.passwordDigest = encrypt(value);
+  }
+
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`;
   }
 
   isCorrectPassword(password) {

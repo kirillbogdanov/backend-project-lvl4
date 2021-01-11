@@ -3,13 +3,6 @@ import qs from 'qs';
 import _ from 'lodash';
 import setCookie from 'set-cookie-parser';
 
-export const fakeUserData = () => ({
-  email: faker.internet.email(),
-  password: faker.internet.password(),
-  firstName: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-});
-
 export const postEntity = (app, prefix, propsObj, session) => app.inject({
   method: 'POST',
   url: prefix,
@@ -34,12 +27,20 @@ export const patchEntity = (app, prefix, id, propsObj, session) => app.inject({
   body: qs.stringify({ data: propsObj }),
 });
 
-export const getEntity = (app, prefix, id, session) => app.inject({
+export const getEntityEditPage = (app, prefix, id, session) => app.inject({
   method: 'GET',
   cookies: {
     session,
   },
   url: `${prefix}/${id}/edit`,
+});
+
+export const getEntityPage = (app, prefix, id, session) => app.inject({
+  method: 'GET',
+  cookies: {
+    session,
+  },
+  url: `${prefix}/${id}`,
 });
 
 export const deleteEntity = (app, prefix, id, session) => app.inject({
@@ -66,10 +67,50 @@ export const getEntityCreationPage = (app, prefix, session) => app.inject({
   url: `${prefix}/new`,
 });
 
-export const authenticateAsNewUser = async (app) => {
+export const fakeUserData = () => ({
+  email: faker.internet.email(),
+  password: faker.internet.password(),
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+});
+
+export const fakeStatusData = () => ({
+  name: faker.lorem.word(),
+});
+
+export const fakeTaskData = (statusId, executorId) => ({
+  name: faker.lorem.word(),
+  description: faker.lorem.text(),
+  statusId,
+  executorId,
+});
+
+export const createUser = async (app) => {
   const userData = fakeUserData();
+
   await postEntity(app, '/users', userData);
-  const signinRes = await postEntity(app, '/session', _.pick(userData, ['email', 'password']));
+  const user = await app.objection.models.user.query().findOne({ email: userData.email });
+
+  return {
+    ...userData,
+    id: Number(user.id),
+  };
+};
+
+export const createStatus = async (app, session) => {
+  const statusData = fakeStatusData();
+
+  await postEntity(app, '/statuses', statusData, session);
+  const status = await app.objection.models.status.query().findOne({ name: statusData.name });
+
+  return {
+    ...statusData,
+    id: Number(status.id),
+  };
+};
+
+export const authenticateAsUser = async (app, user) => {
+  const signinRes = await postEntity(app, '/session', _.pick(user, ['email', 'password']));
 
   return setCookie.parseString(signinRes.headers['set-cookie']).value;
 };

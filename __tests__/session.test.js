@@ -1,24 +1,22 @@
 import {
-  afterAll, beforeAll, describe, test,
+  afterAll, beforeAll, test,
 } from '@jest/globals';
 import createApp from '../server';
 import { getEntityCreationPage } from './helpers';
 
-describe('requests', () => {
-  const prefix = '/session';
-  let app;
+const prefix = '/session';
+let app;
 
-  beforeAll(() => {
-    app = createApp();
-  });
+beforeAll(() => {
+  app = createApp();
+});
 
-  test('GET /session/new', async () => {
-    const res = await getEntityCreationPage(app, prefix);
+afterAll(() => {
+  app.close();
+});
 
-    expect(res.statusCode).toBe(200);
-  });
+test('GET /session/new', async () => {
+  const res = await getEntityCreationPage(app, prefix);
 
-  afterAll(() => {
-    app.close();
-  });
+  expect(res.statusCode).toBe(200);
 });
