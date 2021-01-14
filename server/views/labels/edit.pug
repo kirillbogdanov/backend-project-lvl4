@@ -1,0 +1,9 @@
+extends ../layouts/application.pug
+
+block content
+    .m-auto.w-50
+        h1.h3.mb-3.font-weight-normal.text-center= t('views.labels.edit.title')
+        form(method='POST' action=`/labels/${label.id}`)
+            input(type="hidden" name="_method" value="PATCH")
+            +input(label, 'name', errors, t('views.labels.name'))(type="text" required)
+            +submit(t('views.labels.edit.submit'))

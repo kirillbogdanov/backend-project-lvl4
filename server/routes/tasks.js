@@ -1,33 +1,64 @@
+import _ from 'lodash';
 import Task from '../models/Task.js';
 import Status from '../models/Status.js';
 import User from '../models/User.js';
+import Label from '../models/Label.js';
 
 export default (app, options, done) => {
   const getStatusesSelectOptions = async () => {
     const statuses = await Status.query()
       .select('id', 'name');
 
-    return statuses.map((status) => ({
-      value: status.id,
-      label: status.name,
-    }));
+    return [
+      { label: '' },
+      ...statuses.map((status) => ({
+        value: status.id,
+        label: status.name,
+      })),
+    ];
   };
 
   const getUsersSelectOptions = async () => {
     const users = await User.query()
       .select('id', 'firstName', 'lastName');
 
-    return users.map((user) => ({
-      value: user.id,
-      label: `${user.firstName} ${user.lastName}`,
+    return [
+      { label: '' },
+      ...users.map((user) => ({
+        value: user.id,
+        label: `${user.firstName} ${user.lastName}`,
+      })),
+    ];
+  };
+
+  const getLabelsSelectOptions = async () => {
+    const labels = await Label.query()
+      .select('id', 'name');
+
+    return labels.map((label) => ({
+      value: label.id,
+      label: label.name,
     }));
   };
 
-  const parseTaskData = (taskData) => ({
-    ...taskData,
-    statusId: taskData.statusId ? Number(taskData.statusId) : null,
-    executorId: taskData.executorId ? Number(taskData.executorId) : null,
-  });
+  const parseTaskData = (taskData) => {
+    let labels;
+
+    if (Array.isArray(taskData.labels)) {
+      labels = taskData.labels.map((labelId) => Number(labelId));
+    } else if (taskData.labels) {
+      labels = [Number(taskData.labels)];
+    } else {
+      labels = [];
+    }
+
+    return {
+      ...taskData,
+      statusId: taskData.statusId ? Number(taskData.statusId) : null,
+      executorId: taskData.executorId ? Number(taskData.executorId) : null,
+      labels,
+    };
+  };
 
   app
     .get('/tasks', { preHandler: app.restrictForUnauthorized }, async (req, res) => {
@@ -62,29 +93,32 @@ export default (app, options, done) => {
         const task = Task.fromJson(taskData);
 
         await Task.query().insert(task);
+        if (taskData.labels.length > 0) {
+          await task.addLabels(taskData.labels);
+        }
         req.flash('info', app.t('flash.tasks.create.success'));
 
         res.redirect('/tasks');
         return res;
       } catch (e) {
-        const [statuses, users] = await Promise.all([
-          getStatusesSelectOptions(), getUsersSelectOptions(),
+        const [statuses, users, labels] = await Promise.all([
+          getStatusesSelectOptions(), getUsersSelectOptions(), getLabelsSelectOptions(),
         ]);
 
         req.flash('error', app.t('flash.tasks.create.error'));
         res.render('/tasks/new', {
-          task: req.body.data, statuses, users, errors: e.data,
+          task: parseTaskData(req.body.data), statuses, users, labels, errors: e.data,
         });
         return res;
       }
     })
     .get('/tasks/new', { preHandler: app.restrictForUnauthorized }, async (req, res) => {
       try {
-        const [statuses, users] = await Promise.all([
-          getStatusesSelectOptions(), getUsersSelectOptions(),
+        const [statuses, users, labels] = await Promise.all([
+          getStatusesSelectOptions(), getUsersSelectOptions(), getLabelsSelectOptions(),
         ]);
 
-        res.render('tasks/new', { statuses, users });
+        res.render('tasks/new', { statuses, users, labels });
         return res;
       } catch (e) {
         return e.error;
@@ -104,13 +138,16 @@ export default (app, options, done) => {
 
         const graph = await Task.fetchGraph(
           task,
-          '[status(selectStatus), creator(selectUser), executor(selectUser)]',
+          '[status(selectStatus), creator(selectUser), executor(selectUser), labels(selectLabel)]',
         ).modifiers({
           selectStatus(builder) {
             builder.select('name');
           },
           selectUser(builder) {
             builder.select('firstName', 'lastName');
+          },
+          selectLabel(builder) {
+            builder.select('name');
           },
         });
 
@@ -135,7 +172,20 @@ export default (app, options, done) => {
           return res;
         }
 
+        const taskData = parseTaskData(req.body.data);
+
+        const graph = await Task.fetchGraph(task, 'labels');
+        const currentLabels = graph.labels.map((label) => label.id);
+        const labelsToDelete = _.difference(currentLabels, taskData.labels);
+        const labelsToAdd = _.difference(taskData.labels, currentLabels);
+
         await task.$query().patch(parseTaskData(req.body.data));
+        if (labelsToAdd.length > 0) {
+          await task.addLabels(labelsToAdd);
+        }
+        if (labelsToDelete.length > 0) {
+          await task.deleteLabels(labelsToDelete);
+        }
         req.flash('info', app.t('flash.tasks.edit.success'));
 
         res.redirect('/tasks');
@@ -143,14 +193,14 @@ export default (app, options, done) => {
         return res;
       } catch (e) {
         req.flash('error', app.t('flash.tasks.edit.error'));
-        const task = { ...req.body.data };
-        const [statuses, users] = await Promise.all([
-          getStatusesSelectOptions(), getUsersSelectOptions(),
+        const task = parseTaskData(req.body.data);
+        const [statuses, users, labels] = await Promise.all([
+          getStatusesSelectOptions(), getUsersSelectOptions(), getLabelsSelectOptions(),
         ]);
         task.id = id;
 
         res.render('tasks/edit', {
-          task, statuses, users, errors: e.data,
+          task, statuses, users, labels, errors: e.data,
         });
 
         return res;
@@ -194,11 +244,20 @@ export default (app, options, done) => {
           return res;
         }
 
-        const [statuses, users] = await Promise.all([
-          getStatusesSelectOptions(), getUsersSelectOptions(),
+        const graph = await Task.fetchGraph(task, 'labels(selectLabel)').modifiers({
+          selectLabel(builder) {
+            builder.select('labels.id');
+          },
+        });
+        graph.labels = graph.labels.map((label) => label.id);
+
+        const [statuses, users, labels] = await Promise.all([
+          getStatusesSelectOptions(), getUsersSelectOptions(), getLabelsSelectOptions(),
         ]);
 
-        res.render('tasks/edit', { task, statuses, users });
+        res.render('tasks/edit', {
+          task: graph, statuses, users, labels,
+        });
         return res;
       } catch (e) {
         return e.error;

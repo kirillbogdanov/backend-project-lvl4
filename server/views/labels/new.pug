@@ -1,0 +1,8 @@
+extends ../layouts/application.pug
+
+block content
+    .m-auto.w-50
+        h1.h3.mb-3.font-weight-normal.text-center= t('views.labels.new.title')
+        form(method='POST' action='/labels')
+            +input(label, 'name', errors, t('views.labels.name'))(type="text" required autofocus)
+            +submit(t('views.labels.new.submit'))

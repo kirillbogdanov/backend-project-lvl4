@@ -5,6 +5,7 @@ export default {
       application: {
         users: 'Пользователи',
         statuses: 'Статусы',
+        labels: 'Метки',
         tasks: 'Задачи',
         signin: 'Войти',
         signup: 'Зарегистрироваться',
@@ -55,6 +56,20 @@ export default {
         new: {
           success: 'Аутентификация прошла успешно',
           error: 'Неверная электронная почта или пароль',
+        },
+      },
+      labels: {
+        create: {
+          success: 'Метка успешно создана',
+          error: 'Не удалось создать метку',
+        },
+        edit: {
+          success: 'Метка успешно изменена',
+          error: 'Не удалось изменить метку',
+        },
+        delete: {
+          success: 'Метка успешно удалена',
+          error: 'Не удалось удалить метку',
         },
       },
       common: {
@@ -123,6 +138,24 @@ export default {
         status: 'Статус',
         creator: 'Автор',
         executor: 'Исполнитель',
+        labels: 'Метки',
+        createdAt: 'Дата создания',
+      },
+      labels: {
+        index: {
+          delete: 'Удалить',
+          create: 'Создать метку',
+        },
+        new: {
+          title: 'Новая метка',
+          submit: 'Создать',
+        },
+        edit: {
+          title: 'Редактирование метки',
+          submit: 'Сохранить',
+        },
+        id: 'ID',
+        name: 'Название',
         createdAt: 'Дата создания',
       },
       session: {

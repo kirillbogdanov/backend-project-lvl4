@@ -10,12 +10,12 @@ block content
                 th= t('views.users.createdAt')
                 th
         tbody
-        each user in users
-            tr
-                td= user.id
-                td
-                    a(href=`/users/${user.id}/edit`)= user.email
-                td= user.fullName
-                td= formatDate(user.createdAt)
-                td
-                    +buttonTo(`/users/${user.id}`, 'DELETE', t('views.users.index.delete'))(class="btn btn-sm btn-danger")
+            each user in users
+                tr
+                    td= user.id
+                    td
+                        a(href=`/users/${user.id}/edit`)= user.email
+                    td= user.fullName
+                    td= formatDate(user.createdAt)
+                    td
+                        +buttonTo(`/users/${user.id}`, 'DELETE', t('views.users.index.delete'))(class="btn btn-sm btn-danger")

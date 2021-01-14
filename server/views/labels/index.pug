@@ -1,0 +1,20 @@
+extends ../layouts/application.pug
+
+block content
+    a.btn.btn-primary.mb-2.w-100(href="/labels/new")= t('views.labels.index.create')
+    table.table
+        thead
+            tr
+                th= t('views.labels.id')
+                th= t('views.labels.name')
+                th= t('views.labels.createdAt')
+                th
+        tbody
+            each label in labels
+                tr
+                    td= label.id
+                    td
+                        a(href=`/labels/${label.id}/edit`)= label.name
+                    td= formatDate(label.createdAt)
+                    td
+                        +buttonTo(`/labels/${label.id}`, 'DELETE', t('views.labels.index.delete'))(class="btn btn-sm btn-danger")

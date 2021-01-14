@@ -10,11 +10,11 @@ block content
                 th= t('views.statuses.createdAt')
                 th
         tbody
-        each status in statuses
-            tr
-              td= status.id
-              td
-                  a(href=`/statuses/${status.id}/edit`)= status.name
-              td= formatDate(status.createdAt)
-              td
-                  +buttonTo(`/statuses/${status.id}`, 'DELETE', t('views.statuses.index.delete'))(class="btn btn-sm btn-danger")
+            each status in statuses
+                tr
+                    td= status.id
+                    td
+                        a(href=`/statuses/${status.id}/edit`)= status.name
+                    td= formatDate(status.createdAt)
+                    td
+                        +buttonTo(`/statuses/${status.id}`, 'DELETE', t('views.statuses.index.delete'))(class="btn btn-sm btn-danger")

@@ -2,6 +2,7 @@ import { Model } from 'objection';
 import _ from 'lodash';
 import User from './User.js';
 import Status from './Status.js';
+import Label from './Label.js';
 
 export default class Task extends Model {
   static get tableName() {
@@ -51,7 +52,31 @@ export default class Task extends Model {
           to: 'users.id',
         },
       },
+      labels: {
+        relation: Model.ManyToManyRelation,
+        modelClass: Label,
+        join: {
+          from: 'tasks.id',
+          through: {
+            from: 'tasks_labels.task_id',
+            to: 'tasks_labels.label_id',
+          },
+          to: 'labels.id',
+        },
+      },
     };
+  }
+
+  async $beforeDelete() {
+    await this.$relatedQuery('labels').unrelate();
+  }
+
+  async addLabels(labelIds) {
+    await this.$relatedQuery('labels').relate(labelIds);
+  }
+
+  async deleteLabels(labelIds) {
+    await this.$relatedQuery('labels').unrelate().whereIn('labels.id', labelIds);
   }
 
   $parseJson(json, opt) {

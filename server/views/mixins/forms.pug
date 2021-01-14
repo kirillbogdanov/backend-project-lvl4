@@ -42,8 +42,22 @@ mixin select(entity, propertyName, options, errors = [], label)
             name=getInputName(propertyName)
             class=classLine
         )&attributes(attributes)
-            option
             each opt in options
                 option(value=opt.value selected=(opt.value === _.get(entity, propertyName, '')))= opt.label
+        if !_.isEmpty(errors)
+            .invalid-feedback= errors.map(({ message }) => message).join('. ')
+
+mixin multiselect(entity, propertyName, options, errors = [], label)
+  - errors = Array(_.get(errors, propertyName, [])).flat()
+  - classLine = 'form-control' + (_.isEmpty(errors) ? '' : ' is-invalid')
+    .form-group(class=(errors[propertyName] && 'has-danger'))
+        label= label
+        select(
+            name=getInputName(propertyName)
+            class=classLine
+            multiple
+        )&attributes(attributes)
+          each opt in options
+              option(value=opt.value selected=(_.get(entity, propertyName, []).includes(opt.value)))= opt.label
         if !_.isEmpty(errors)
             .invalid-feedback= errors.map(({ message }) => message).join('. ')

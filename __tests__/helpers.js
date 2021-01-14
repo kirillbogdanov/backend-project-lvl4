@@ -85,6 +85,10 @@ export const fakeTaskData = (statusId, executorId) => ({
   executorId,
 });
 
+export const fakeLabelData = () => ({
+  name: faker.lorem.word(),
+});
+
 export const createUser = async (app) => {
   const userData = fakeUserData();
 

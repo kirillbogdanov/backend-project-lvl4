@@ -18,6 +18,12 @@ block content
                     .col= t('views.tasks.status')
                     .col= task.status.name
                 .row.p-1
+                    .col= t('views.tasks.labels')
+                    .col
+                        ul
+                            each label in task.labels
+                                li= label.name
+                .row.p-1
                     .col= t('views.tasks.createdAt')
                     .col= formatDate(task.createdAt)
         .card-footer

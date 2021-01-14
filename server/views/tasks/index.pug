@@ -13,15 +13,15 @@ block content
                 th= t('views.tasks.createdAt')
                 th
         tbody
-        each task in tasks
-            tr
-                td= task.id
-                td
-                    a(href=`/tasks/${task.id}`)= task.name
-                td= task.status.name
-                td= task.creator.fullName
-                td= task.executor ? task.executor.fullName : ''
-                td= formatDate(task.createdAt)
-                td
-                    a.btn.btn-sm.btn-primary.mb-1(href=`/tasks/${task.id}/edit`)= t('views.tasks.index.edit')
-                    +buttonTo(`/tasks/${task.id}`, 'DELETE', t('views.tasks.index.delete'))(class="btn btn-sm btn-danger")
+            each task in tasks
+                tr
+                    td= task.id
+                    td
+                        a(href=`/tasks/${task.id}`)= task.name
+                    td= task.status.name
+                    td= task.creator.fullName
+                    td= task.executor ? task.executor.fullName : ''
+                    td= formatDate(task.createdAt)
+                    td
+                        a.btn.btn-sm.btn-primary.mb-1(href=`/tasks/${task.id}/edit`)= t('views.tasks.index.edit')
+                        +buttonTo(`/tasks/${task.id}`, 'DELETE', t('views.tasks.index.delete'))(class="btn btn-sm btn-danger")
